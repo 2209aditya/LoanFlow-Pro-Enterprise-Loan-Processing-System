@@ -1,0 +1,20 @@
+trigger: none
+
+variables:
+  env: uat
+
+stages:
+
+- stage: Approval_QA
+  jobs:
+  - template: ../templates/manual-approval.yml
+    parameters:
+      approvers: 'qa-team@company.com'
+
+- stage: Deploy_UAT
+  dependsOn: Approval_QA
+  jobs:
+  - template: ../templates/deploy.yml
+    parameters:
+      environment: uat
+      namespace: uat

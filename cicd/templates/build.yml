@@ -1,0 +1,11 @@
+jobs:
+- job: Build
+  pool:
+    vmImage: ubuntu-latest
+
+  steps:
+  - checkout: self
+
+  - script: |
+      echo "Building application..."
+      docker build -t loanflow:$(Build.BuildId) .

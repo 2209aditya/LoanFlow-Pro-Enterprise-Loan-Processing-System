@@ -1,0 +1,18 @@
+trigger: none
+
+stages:
+
+- stage: Incident_Command_Approval
+  jobs:
+  - template: ../templates/manual-approval.yml
+    parameters:
+      approvers: 'incident-commander@company.com'
+
+- stage: DR_Failover
+  dependsOn: Incident_Command_Approval
+  jobs:
+  - job: SwitchTraffic
+    steps:
+    - script: |
+        echo "🚨 DR Failover Initiated"
+        bash ../../scripts/monitoring/check-dr-health.sh

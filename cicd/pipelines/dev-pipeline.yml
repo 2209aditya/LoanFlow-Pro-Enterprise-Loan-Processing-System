@@ -1,0 +1,19 @@
+trigger:
+- develop
+
+variables:
+  env: dev
+
+stages:
+
+- stage: Build
+  jobs:
+  - template: ../templates/build.yml
+
+- stage: Deploy_DEV
+  dependsOn: Build
+  jobs:
+  - template: ../templates/deploy.yml
+    parameters:
+      environment: dev
+      namespace: dev

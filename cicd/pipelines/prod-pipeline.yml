@@ -1,0 +1,27 @@
+trigger: none
+
+stages:
+
+- stage: Approval_Prod
+  jobs:
+  - template: ../templates/manual-approval.yml
+    parameters:
+      approvers: 'cto@company.com,sre@company.com'
+
+- stage: Deploy_Prod
+  dependsOn: Approval_Prod
+  jobs:
+  - template: ../templates/deploy.yml
+    parameters:
+      environment: prod
+      namespace: prod
+
+- stage: Rollback
+  dependsOn: Deploy_Prod
+  condition: failed()
+  jobs:
+  - job: RollbackJob
+    steps:
+    - script: |
+        echo "Rolling back deployment..."
+        bash ../../scripts/deployment/rollback.sh

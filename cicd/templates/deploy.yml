@@ -1,0 +1,24 @@
+parameters:
+  environment: ''
+  namespace: ''
+
+jobs:
+- deployment: Deploy
+  environment: ${{ parameters.environment }}
+
+  strategy:
+    runOnce:
+      deploy:
+        steps:
+        - script: |
+            echo "Deploying to ${{ parameters.environment }}"
+
+        - task: HelmDeploy@0
+          inputs:
+            connectionType: 'Kubernetes Service Connection'
+            kubernetesServiceConnection: 'aks-conn'
+            namespace: ${{ parameters.namespace }}
+            command: upgrade
+            chartType: FilePath
+            chartPath: helm/loanflow
+            releaseName: loanflow

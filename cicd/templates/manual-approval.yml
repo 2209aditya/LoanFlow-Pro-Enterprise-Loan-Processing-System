@@ -1,0 +1,12 @@
+parameters:
+  approvers: ''
+
+jobs:
+- job: Approval
+  pool: server
+
+  steps:
+  - task: ManualValidation@0
+    inputs:
+      notifyUsers: ${{ parameters.approvers }}
+      instructions: "Approve deployment"

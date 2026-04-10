@@ -1,0 +1,17 @@
+trigger: none
+
+stages:
+
+- stage: Approval_PreProd
+  jobs:
+  - template: ../templates/manual-approval.yml
+    parameters:
+      approvers: 'qa-team@company.com,architect@company.com'
+
+- stage: Deploy_PreProd
+  dependsOn: Approval_PreProd
+  jobs:
+  - template: ../templates/deploy.yml
+    parameters:
+      environment: preprod
+      namespace: preprod
